@@ -7,6 +7,7 @@ class vector
 {
     T* array;
     int size;
+    int index;
 
 public:
     void display()
@@ -31,17 +32,21 @@ public:
     {
         array = new T[5];
         size = 5;
+        index = 0;
     }
 
     vector(int size)
     {
         array = new T[size];
         this->size = size;
+        index = 0;
     }
 
     ~vector()
     {
-
+        delete[]array;
+        size = 0;
+        index = 0;
     }
 
 //  Element Access Start 
@@ -65,25 +70,24 @@ public:
         return array;
     }
 //  Element access end
+
+    void push_back(T data)
+    {
+        array[index] = data;
+        index++;
+    }
+
 };
 
 int main(void)
 {
     vector <int> v(10);
-    v.give_values();
-    v.display();
-
-    int* p = v.data();
-
-    *p = 100;
-    p++;
-    *p = 200;
-    p++;
-    *p = 300;
-
-    cout << v.at(0) << endl;
-    cout << v.at(1) << endl;
-    cout << v.at(2) << endl;
+ 
+    v.push_back(10);
+    v.push_back(20);
+    v.push_back(30);
+    v.push_back(40);
+    v.push_back(50);
 
     v.display();
 
