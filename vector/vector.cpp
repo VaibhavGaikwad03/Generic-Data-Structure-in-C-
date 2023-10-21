@@ -80,10 +80,18 @@ public:
     }
 //  Element access end
 
+//  Capacity functions start
     size_t size()
     {
         return index;
     }
+
+    size_t capacity()
+    {
+        return _size;
+    }
+
+//  Capacity functions end
 
     void push_back(T data)
     {
@@ -92,7 +100,7 @@ public:
         if (_size == index)
         {
             temp = array;
-            array = new int[_size += 10];
+            array = new int[_size += _size];
             copy(array, temp);
             delete[]temp;
             temp = NULL;
@@ -105,10 +113,25 @@ public:
 
 int main(void)
 {
-    vector <int> v;
+    vector <int> v(5);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
+    v.push_back(10);
 
     cout << v.size() << endl;
-    v.display();
+    cout << v.capacity() << endl;
 
     return 0;
 }
