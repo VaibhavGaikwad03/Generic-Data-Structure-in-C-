@@ -1,20 +1,29 @@
 #include <iostream>
+#define CONTAINER_SIZE 10
 using std::cout;
 using std::endl;
- 
+
 template <class T>
 class vector
 {
     T* array;
-    int size;
+    int _size;
     int index;
+
+    void copy(T* dest, T* src)
+    {
+        int i;
+
+        for (i = 0; i < index; i++)
+            dest[i] = src[i];
+    }
 
 public:
     void display()
     {
         int i;
 
-        for (i = 0; i < size; i++)
+        for (i = 0; i < index; i++)
             cout << array[i] << " ";
         cout << endl;
     }
@@ -30,22 +39,22 @@ public:
 public:
     vector()
     {
-        array = new T[5];
-        size = 5;
+        array = new T[CONTAINER_SIZE];
+        _size = 0;
         index = 0;
     }
 
     vector(int size)
     {
         array = new T[size];
-        this->size = size;
-        index = 0;
+        _size = size;
+        index = size;
     }
 
     ~vector()
     {
         delete[]array;
-        size = 0;
+        _size = 0;
         index = 0;
     }
 
@@ -71,24 +80,34 @@ public:
     }
 //  Element access end
 
+    size_t size()
+    {
+        return index;
+    }
+
     void push_back(T data)
     {
-        array[index] = data;
-        index++;
+        T* temp = NULL;
+
+        if (_size == index)
+        {
+            temp = array;
+            array = new int[_size += 10];
+            copy(array, temp);
+            delete[]temp;
+            temp = NULL;
+        }
+
+        array[index++] = data;
     }
 
 };
 
 int main(void)
 {
-    vector <int> v(10);
- 
-    v.push_back(10);
-    v.push_back(20);
-    v.push_back(30);
-    v.push_back(40);
-    v.push_back(50);
+    vector <int> v;
 
+    cout << v.size() << endl;
     v.display();
 
     return 0;
