@@ -59,36 +59,51 @@ public:
     }
 
 //  Element Access Start 
-    T& at(int index)
+    T& at(int index) const 
     {
         return array[index];
     }
 
-    T& front()
+    T& front() const
     {
         return array[0];
     }
 
-    T& back()
+    T& back() const
     {
         return array[size - 1];
     }
 
-    T* data()
+    T* data() const
     {
         return array;
     }
 //  Element access end
 
 //  Capacity functions start
-    size_t size()
+    size_t size() const
     {
         return index;
     }
 
-    size_t capacity()
+    size_t capacity() const
     {
         return _size;
+    }
+
+    void resize(size_t new_size)
+    {
+        if (new_size < 0)
+            return;
+
+        if ((new_size < index || new_size > index) && new_size <= _size)
+            index = new_size;
+        else
+        {
+
+        }
+        
+
     }
 
 //  Capacity functions end
@@ -120,18 +135,11 @@ int main(void)
     v.push_back(10);
     v.push_back(10);
     v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
-    v.push_back(10);
+    v.at(1) = 1;
 
     cout << v.size() << endl;
     cout << v.capacity() << endl;
+    v.display();
 
     return 0;
 }
