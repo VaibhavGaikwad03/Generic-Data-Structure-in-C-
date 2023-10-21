@@ -1,7 +1,7 @@
 #include <iostream>
 using std::cout;
 using std::endl;
-
+ 
 template <class T>
 class vector
 {
