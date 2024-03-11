@@ -14,7 +14,7 @@ void test_normal(const list &lst)
     }
     cout << '\n';
 }
-
+ 
 void test_reverse(const list &lst)
 {
     int i;
