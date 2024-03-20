@@ -1,7 +1,7 @@
 #include "list_server.h"
 #include <iostream>
 using std::cout;
-
+ 
 void test_normal(const list &lst)
 {
     int i;
