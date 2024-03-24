@@ -491,16 +491,18 @@ void list<T>::delete_all()
     }
 }
 
-int main()
+template <typename T>
+void my_main(T type)
 {
-    int flag = true, choice, result;
-    int data, position, concat_position;
-    list<int> list1;
-    list<int> list2;
+    bool flag = true;
+    int choice, position, concat_position;
+    T data, result;
+    list<T> list1;
+    list<T> list2;
 
     while (flag)
     {
-        cout << "\n1. Insert\n2. Delete\n3. Search\n4. Count\n5. Reverse\n6. Concat\n7. Exit\n>_";
+        cout << "\n1. Insert\n2. Delete\n3. Search\n4. Count\n5. Reverse\n6. Concat\n7. Back\n>_";
         cin >> choice;
 
         switch (choice)
@@ -965,6 +967,44 @@ int main()
 
             flag = false;
 
+            break;
+
+        default:
+            cout << "\nInvalid choice.\n";
+        }
+    }
+}
+
+int main()
+{
+    int choice;
+    bool flag = true;
+
+    while (flag)
+    {
+        cout << "\nEnter your choice to specify the data type of your linked list: ";
+        cout << "\n1. Integer\n2. Character\n3. Float\n4. Double\n5. Exit\n>_";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            my_main(1);
+            break;
+
+        case 2:
+            my_main('A');
+            break;
+
+        case 3:
+            my_main(1.1f);
+            break;
+
+        case 4:
+            my_main(1.1);
+            break;
+        case 5:
+            flag = false;
             break;
 
         default:
