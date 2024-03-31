@@ -250,26 +250,15 @@ public:
         int deleted_data;
         node *temp_delete = nullptr;
 
-        if (head == nullptr)
+        if (counter == 0) /* dummy_node->next == dummy_node */
             return -1;
 
-        deleted_data = tail->data;
+        deleted_data = dummy_node->prev->data;
 
-        if (head == tail)
-        {
-            tail->next = tail->prev = nullptr;
-            delete tail;
-            head = tail = nullptr;
-        }
-        else
-        {
-            temp_delete = tail;
-            tail = tail->prev;
-            head->prev = tail;
-            tail->next = head;
-            temp_delete->next = temp_delete->prev = nullptr;
-            delete temp_delete;
-        }
+        dummy_node->prev = dummy_node->prev->prev;
+        delete dummy_node->prev->next;
+        dummy_node->prev->next = dummy_node;
+
         counter--;
         return deleted_data;
     }
@@ -608,8 +597,10 @@ int main()
                     if (list1.is_empty())
                         cout << "\nList is empty.\n";
                     else
+                    {
                         display_iterator(list1);
-
+                        list1.reverse_display();
+                    }
                     break;
 
                 case 2:
@@ -627,7 +618,10 @@ int main()
                     if (list1.is_empty())
                         cout << "\nList is empty.\n";
                     else
+                    {
                         display_iterator(list1);
+                        list1.reverse_display();
+                    }
 
                     break;
 
@@ -653,7 +647,10 @@ int main()
                     if (list1.is_empty())
                         cout << "\nList is empty.\n";
                     else
+                    {
                         display_iterator(list1);
+                        list1.reverse_display();
+                    }
 
                     break;
 
