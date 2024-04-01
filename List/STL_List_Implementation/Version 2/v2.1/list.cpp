@@ -278,7 +278,7 @@ public:
             return delete_last();
         else
         {
-            temp_node = head;
+            temp_node = dummy_node->next;
 
             for (i = 1; i < pos - 1; i++)
                 temp_node = temp_node->next;
@@ -298,10 +298,18 @@ public:
     int search_first_occurrence(int key) const
     {
         int i, position = 1;
-        node *temp_node = head;
+        node *temp_node = dummy_node->next;
 
-        if (head == nullptr)
+        if (counter == 0) /* dummy_node->next == dummy_node */
             return -1;
+
+        // do
+        // {
+        //     if (temp_node->data == key)
+        //         return position;
+        //     position++;
+        //     temp_node = temp_node->next;
+        // } while (temp_node != dummy_node->next);
 
         for (i = 1; i <= counter; i++)
         {
@@ -315,10 +323,10 @@ public:
 
     int search_last_occurrence(int key) const
     {
-        node *temp_node = head;
+        node *temp_node = dummy_node->next;
         int i, position = 1, ret_position = -2;
 
-        if (head == nullptr)
+        if (counter == 0) /* dummy_node->next == dummy_node */
             return -1;
 
         for (i = 1; i <= counter; i++)
@@ -334,9 +342,9 @@ public:
     int search_all_occurrence(int key) const
     {
         int i, count_occ = 0;
-        node *temp_node = head;
+        node *temp_node = dummy_node->next;
 
-        if (head == nullptr)
+        if (counter == 0) /* dummy_node->next == dummy_node */
             return 0;
 
         for (i = 1; i <= counter; i++)
