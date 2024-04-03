@@ -370,8 +370,8 @@ public:
 
         dummy_node->prev->next = new_list.dummy_node->next;
         new_list.dummy_node->next->prev = dummy_node->prev;
-        new_list.dummy_node->prev->next = dummy_node->next;
-        dummy_node->next->prev = new_list.dummy_node->prev;
+        dummy_node->prev = new_list.dummy_node->prev;
+        new_list.dummy_node->prev->next = dummy_node;
         counter += new_list.counter;
         new_list.counter = 0;
         new_list.dummy_node->next = new_list.dummy_node->prev = new_list.dummy_node;
@@ -385,33 +385,41 @@ public:
         if (pos < 1 || pos > counter + 1)
             return;
 
-        if (new_list.head == nullptr)
+        if (new_list.counter == 0) /* new_list.dummy_node->next == new_list.dummy_node */
             return;
 
         if (pos == 1)
         {
             new_list.concat_list(*this);
-            head = new_list.head;
-            tail = new_list.tail;
+            dummy_node->next = new_list.dummy_node->next;
+            dummy_node->prev = new_list.dummy_node->prev;
+            new_list.dummy_node->next->prev = dummy_node;
+            new_list.dummy_node->prev->next = dummy_node;
             counter = new_list.counter;
-            new_list.head = new_list.tail = nullptr;
+            new_list.counter = 0;
+            new_list.dummy_node->next = new_list.dummy_node->prev = new_list.dummy_node;
         }
         else if (pos == counter + 1)
             concat_list(new_list);
         else
         {
-            temp_node = head;
+            temp_node = dummy_node->next;
 
             for (i = 1; i < pos - 1; i++)
                 temp_node = temp_node->next;
 
-            new_list.tail->next = temp_node->next;
-            temp_node->next->prev = new_list.tail;
-            temp_node->next = new_list.head;
-            new_list.head->prev = temp_node;
+            new_list.dummy_node->prev->next = temp_node->next;
+            temp_node->next->prev = dummy_node->prev;
+            new_list.dummy_node->next->prev = temp_node;
+            temp_node->next = new_list.dummy_node->next;
+
+            // new_list.tail->next = temp_node->next;
+            // temp_node->next->prev = new_list.tail;
+            // temp_node->next = new_list.head;
+            // new_list.head->prev = temp_node;
             counter += new_list.counter;
             new_list.counter = 0;
-            new_list.head = new_list.tail = nullptr;
+            new_list.dummy_node->next = new_list.dummy_node->prev = new_list.dummy_node;
         }
     }
 
