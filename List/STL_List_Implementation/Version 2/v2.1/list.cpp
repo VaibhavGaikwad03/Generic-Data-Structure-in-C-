@@ -476,7 +476,6 @@ public:
     }
 
     friend class iterator;
-
     friend ostream &operator<<(ostream &out, list &lst);
 };
 
