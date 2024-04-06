@@ -35,8 +35,6 @@ class node
 
 class list
 {
-    node *head;
-    node *tail;
     node *dummy_node;
     int counter;
 
@@ -409,14 +407,10 @@ public:
                 temp_node = temp_node->next;
 
             new_list.dummy_node->prev->next = temp_node->next;
-            temp_node->next->prev = dummy_node->prev;
-            new_list.dummy_node->next->prev = temp_node;
+            temp_node->next->prev = new_list.dummy_node->prev;
             temp_node->next = new_list.dummy_node->next;
+            new_list.dummy_node->next->prev = temp_node;
 
-            // new_list.tail->next = temp_node->next;
-            // temp_node->next->prev = new_list.tail;
-            // temp_node->next = new_list.head;
-            // new_list.head->prev = temp_node;
             counter += new_list.counter;
             new_list.counter = 0;
             new_list.dummy_node->next = new_list.dummy_node->prev = new_list.dummy_node;
@@ -425,10 +419,10 @@ public:
 
     void physical_reverse()
     {
-        node *current = head;
+        node *current = dummy_node;
         node *next = nullptr;
 
-        if (head == nullptr)
+        if (counter == 0) /* dummy_node->next == dummy_node */
             return;
 
         do
@@ -437,30 +431,28 @@ public:
             current->next = current->prev;
             current->prev = next;
             current = next;
-
-        } while (current != head);
-
-        head = tail;
-        tail = current;
+        } while (current != dummy_node);
     }
 
     void delete_all()
     {
-        node *temp_node = head;
+        node *temp_delete = nullptr;
+        node *temp_node = dummy_node->next;
 
-        if (head == nullptr)
+        if (counter == 0) /* dummy_node->next == dummy_node */
             return;
 
-        head->prev = nullptr;
-        tail->next = nullptr;
+        dummy_node->prev->next = nullptr;
 
-        while (head != nullptr)
+        while (temp_node != nullptr)
         {
-            head = temp_node->next;
-            temp_node->next = temp_node->prev = nullptr;
-            delete temp_node;
-            temp_node = head;
+            temp_delete = temp_node;
+            temp_node = temp_node->next;
+            temp_delete->prev = temp_delete->next = nullptr;
+            delete temp_delete;
         }
+        counter = 0;
+        dummy_node->next = dummy_node->prev = dummy_node;
     }
 
     iterator &begin()
@@ -481,7 +473,7 @@ public:
 
 ostream &operator<<(ostream &out, list &lst)
 {
-    node *temp_node = lst.head;
+    node *temp_node = lst.dummy_node->next;
 
     if (temp_node == nullptr)
         return out;
@@ -490,7 +482,7 @@ ostream &operator<<(ostream &out, list &lst)
     {
         out << temp_node->data << ' ';
         temp_node = temp_node->next;
-    } while (temp_node != lst.head);
+    } while (temp_node != lst.dummy_node->next);
 
     return out;
 }
@@ -610,10 +602,8 @@ int main()
                     if (list1.is_empty())
                         cout << "\nList is empty.\n";
                     else
-                    {
                         display_iterator(list1);
-                        list1.reverse_display();
-                    }
+
                     break;
 
                 case 2:
@@ -631,10 +621,7 @@ int main()
                     if (list1.is_empty())
                         cout << "\nList is empty.\n";
                     else
-                    {
                         display_iterator(list1);
-                        list1.reverse_display();
-                    }
 
                     break;
 
@@ -660,10 +647,7 @@ int main()
                     if (list1.is_empty())
                         cout << "\nList is empty.\n";
                     else
-                    {
                         display_iterator(list1);
-                        list1.reverse_display();
-                    }
 
                     break;
 
