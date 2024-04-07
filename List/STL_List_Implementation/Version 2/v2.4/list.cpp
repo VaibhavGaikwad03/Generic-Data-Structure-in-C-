@@ -7,7 +7,6 @@ using std::ostream;
 template <typename T>
 class list;
 
-template <typename T>
 class iterator;
 
 template <typename T>
@@ -24,7 +23,7 @@ class node
     ~node();
 
     friend class list<T>;
-    friend class iterator<T>;
+    friend class iterator;
     friend ostream &operator<< <T>(ostream &out, list<T> &lst);
 };
 
