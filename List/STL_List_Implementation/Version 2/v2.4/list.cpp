@@ -6,7 +6,7 @@ using std::ostream;
  
 template <typename T>
 class list;
-
+ 
 class iterator;
 
 template <typename T>
