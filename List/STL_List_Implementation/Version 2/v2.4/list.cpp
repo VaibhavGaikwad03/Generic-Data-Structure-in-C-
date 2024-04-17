@@ -3,10 +3,10 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::ostream;
- 
+
 template <typename T>
 class list;
- 
+
 class iterator;
 
 template <typename T>
@@ -434,6 +434,7 @@ void list<T>::concat_list(list<T> &new_list)
 {
     if (new_list.counter == 0) /* new_list.dummy_node->next == dummy_node */
         return;
+
     if (counter == 0) /* dummy_node->next == dummy_node */
     {
         dummy_node->next = new_list.dummy_node->next;
