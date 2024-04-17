@@ -498,26 +498,90 @@ public:
     }
 
     ///////////////////////////////////////////////////////////
-    /*
-        list &operator=(const list &lst) // Implement this later
+
+    list &operator=(const list &lst) // Implement this later
+    {
+        int lcnt;
+        node *dest_node = nullptr;
+        node *src_node = nullptr;
+
+        if (this->counter == 0) // First list is empty
         {
-            this->dummy_node = new node;
-            node *temp_node = lst.dummy_node->next;
+            cout << "Empty\n";
+            src_node = lst.dummy_node->next;
 
-            this->counter = lst.counter;
-            if (this->counter != 0) // If
-                this->counter = 0;
-
-            this->dummy_node->prev = this->dummy_node->next = this->dummy_node;
-
-            for (int i = 0; i < lst.counter; i++)
+            for (lcnt = 0; lcnt < lst.counter; lcnt++)
             {
-                this->insert_last(temp_node->data);
-                temp_node = temp_node->next;
+                this->insert_last(src_node->data);
+                src_node = src_node->next;
             }
             return *this;
         }
-    */
+
+        dest_node = this->dummy_node->next;
+        src_node = lst.dummy_node->next;
+
+        if (this->counter < lst.counter)
+        {
+            cout << "Less\n";
+
+            for (lcnt = 0; lcnt < lst.counter; lcnt++)
+            {
+                dest_node->data = src_node->data;
+
+                if (lcnt >= this->counter)
+                    this->insert_last(src_node->data);
+                else
+                    dest_node = dest_node->next;
+                src_node = src_node->next;
+            }
+        }
+        else if (this->counter > lst.counter)
+        {
+            cout << "More\n";
+
+            int temp_counter = this->counter;
+
+            for (lcnt = 0; lcnt < temp_counter; lcnt++)
+            {
+                dest_node->data = src_node->data;
+                if (lcnt >= lst.counter)
+                {
+                    this->delete_last();
+                    continue;
+                }
+                dest_node = dest_node->next;
+                src_node = src_node->next;
+            }
+        }
+        else
+        {
+            cout << "Equal\n";
+
+            for (int lcnt = 0; lcnt < this->counter; lcnt++)
+            {
+                dest_node->data = src_node->data;
+                dest_node = dest_node->next;
+                src_node = src_node->next;
+            }
+        }
+
+        // this->dummy_node = new node;
+        // node *temp_node = lst.dummy_node->next;
+
+        // this->counter = lst.counter;
+        // if (this->counter != 0) // If
+        //     this->counter = 0;
+
+        // this->dummy_node->prev = this->dummy_node->next = this->dummy_node;
+
+        // for (int i = 0; i < lst.counter; i++)
+        // {
+        //     this->insert_last(temp_node->data);
+        //     temp_node = temp_node->next;
+        // }
+        return *this;
+    }
 
     void push_front(int data)
     {
@@ -544,9 +608,13 @@ public:
         lst.dummy_node->prev = lst.dummy_node->next = lst.dummy_node;
     }
 
-    void splice(iterator position, list &lst, iterator iter)
+    void splice(iterator dest_pos, list &lst, iterator src_pos)
     {
-        
+    }
+
+    void merge(list &lst)
+    {
+        this->concat_list(lst);
     }
 
     ///////////////////////////////////////////////////////////
@@ -588,8 +656,7 @@ void printLists(list list1, list list2)
     cout << "list2: ";
     for (list::iterator iter = list2.begin(); iter != list2.end(); ++iter)
         cout << *iter << ' ';
-    cout << endl
-         << endl;
+    cout << endl;
 }
 
 list::iterator find(list::iterator start, list::iterator end, int key)
@@ -602,6 +669,34 @@ list::iterator find(list::iterator start, list::iterator end, int key)
     }
     return start;
 }
+
+/*int main()
+{
+    list ls1, ls2;
+    ls1.push_back(60);
+    ls1.push_back(70);
+    ls1.push_back(80);
+    ls1.push_back(90);
+    ls1.push_back(100);
+
+    ls2.push_back(10);
+    ls2.push_back(20);
+    ls2.push_back(30);
+    ls2.push_back(40);
+    ls2.push_back(50);
+
+    printLists(ls1, ls2);
+    cout << ls1.count_nodes() << endl
+         << ls2.count_nodes() << endl;
+
+    ls1 = ls2;
+
+    printLists(ls1, ls2);
+    cout << ls1.count_nodes() << endl
+         << ls2.count_nodes() << endl;
+
+    return 0;
+}*/
 
 int main()
 {
@@ -628,16 +723,16 @@ int main()
     printLists(list1, list2);
 
     // Move first element of list2 to the end
-    list2.splice(list2.end(),    // Destination position
-                 list2,          // Source list
-                 list2.begin()); // Socurce positions
-
-    printLists(list1, list2);
-
-    // // Merge both sorted lists into the first list
-    // list1.merge(list2);
+    // list2.splice(list2.end(),    // Destination position
+    //              list2,          // Source list
+    //              list2.begin()); // Source positions
 
     // printLists(list1, list2);
+
+    // Merge both sorted lists into the first list
+    list1.merge(list2);
+
+    printLists(list1, list2);
 
     return 0;
 }
