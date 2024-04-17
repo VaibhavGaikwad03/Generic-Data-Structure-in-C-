@@ -134,14 +134,17 @@ public:
     //////////////////////////////////////////////////
     list(list &lst)
     {
-        this->dummy_node = new node;
-        node *temp_node = lst.dummy_node->next;
+        node *temp_node = nullptr;
 
-        if (dummy_node == nullptr)
-            return;
+        this->dummy_node = new node;
+        if (this->dummy_node == nullptr)
+            return; // Memory allocation failed
 
         // this->counter = lst.counter;
         this->dummy_node->prev = this->dummy_node->next = this->dummy_node;
+
+        if (lst.dummy_node->next != lst.dummy_node)
+            temp_node = lst.dummy_node->next;
 
         for (int i = 0; i < lst.counter; i++)
         {
@@ -390,9 +393,13 @@ public:
             return;
         if (counter == 0) /* dummy_node->next == dummy_node */
         {
-            dummy_node = new_list.dummy_node;
-            new_list.dummy_node = nullptr;
-            counter += new_list.counter;
+            dummy_node->next = new_list.dummy_node->next;
+            dummy_node->prev = new_list.dummy_node->prev;
+            dummy_node->next->prev = dummy_node;
+            dummy_node->prev->next = dummy_node;
+            counter = new_list.counter;
+            new_list.counter = 0;
+            new_list.dummy_node->next = new_list.dummy_node->prev = new_list.dummy_node;
             return;
         }
 
