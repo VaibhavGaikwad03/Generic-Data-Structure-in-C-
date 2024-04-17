@@ -360,9 +360,13 @@ public:
             return;
         if (counter == 0) /* dummy_node->next == dummy_node */
         {
-            dummy_node = new_list.dummy_node;
-            new_list.dummy_node = nullptr;
-            counter += new_list.counter;
+            dummy_node->next = new_list.dummy_node->next;
+            dummy_node->prev = new_list.dummy_node->prev;
+            dummy_node->next->prev = dummy_node;
+            dummy_node->prev->next = dummy_node;
+            counter = new_list.counter;
+            new_list.counter = 0;
+            new_list.dummy_node->next = new_list.dummy_node->prev = new_list.dummy_node;
             return;
         }
 
