@@ -617,6 +617,9 @@ public:
 
     void splice(iterator dest_pos, list &lst, iterator src_pos)
     {
+        node *temp_node = src_pos.get_current_node();
+
+        
     }
 
     void merge(list &lst)
