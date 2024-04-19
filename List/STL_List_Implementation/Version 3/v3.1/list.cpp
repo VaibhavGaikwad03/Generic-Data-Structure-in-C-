@@ -3,12 +3,14 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::ostream;
- 
+
 class list;
 
 class iterator;
 
 ostream &operator<<(ostream &out, list &lst);
+
+void display_iterator(list);
 
 class node
 {
@@ -514,7 +516,6 @@ public:
 
         if (this->counter == 0) // First list is empty
         {
-            cout << "Empty\n";
             src_node = lst.dummy_node->next;
 
             for (lcnt = 0; lcnt < lst.counter; lcnt++)
@@ -528,10 +529,8 @@ public:
         dest_node = this->dummy_node->next;
         src_node = lst.dummy_node->next;
 
-        if (this->counter < lst.counter)
+        if (this->counter < lst.counter) // If elements are less
         {
-            cout << "Less\n";
-
             for (lcnt = 0; lcnt < lst.counter; lcnt++)
             {
                 dest_node->data = src_node->data;
@@ -543,10 +542,8 @@ public:
                 src_node = src_node->next;
             }
         }
-        else if (this->counter > lst.counter)
+        else if (this->counter > lst.counter) // If elements are more
         {
-            cout << "More\n";
-
             int temp_counter = this->counter;
 
             for (lcnt = 0; lcnt < temp_counter; lcnt++)
@@ -561,10 +558,8 @@ public:
                 src_node = src_node->next;
             }
         }
-        else
+        else // If elements are same
         {
-            cout << "Equal\n";
-
             for (int lcnt = 0; lcnt < this->counter; lcnt++)
             {
                 dest_node->data = src_node->data;
@@ -572,21 +567,6 @@ public:
                 src_node = src_node->next;
             }
         }
-
-        // this->dummy_node = new node;
-        // node *temp_node = lst.dummy_node->next;
-
-        // this->counter = lst.counter;
-        // if (this->counter != 0) // If
-        //     this->counter = 0;
-
-        // this->dummy_node->prev = this->dummy_node->next = this->dummy_node;
-
-        // for (int i = 0; i < lst.counter; i++)
-        // {
-        //     this->insert_last(temp_node->data);
-        //     temp_node = temp_node->next;
-        // }
         return *this;
     }
 
@@ -617,14 +597,100 @@ public:
 
     void splice(iterator dest_pos, list &lst, iterator src_pos)
     {
-        node *temp_node = src_pos.get_current_node();
+        node *src_node = nullptr;
+        node *dest_node = nullptr;
 
-        
+        if (lst.is_empty())
+            return;
+
+        src_node = src_pos.get_current_node();
+        dest_node = dest_pos.get_current_node();
+
+        // Removing element from source
+        src_node->prev->next = src_node->next;
+        src_node->next->prev = src_node->prev;
+        lst.counter--;
+
+        // Inserting source node before destination node
+
+        src_node->next = dest_node;
+        src_node->prev = dest_node->prev;
+        dest_node->prev->next = src_node;
+        dest_node->prev = src_node;
+        counter++;
+    }
+
+    void sort()
+    {
+        if (counter <= 1)
+        {
+            return;
+        }
+
+        node *min_node = nullptr;
+        node *temp_node = nullptr;
+        node *current = dummy_node->next;
+
+        while (current != dummy_node)
+        {
+            min_node = current;
+            temp_node = current->next;
+
+            while (temp_node != dummy_node)
+            {
+                if (min_node->data > temp_node->data)
+                    min_node = temp_node;
+                temp_node = temp_node->next;
+            }
+
+            if (min_node != current)
+            {
+                min_node->next->prev = min_node->prev;
+                min_node->prev->next = min_node->next;
+
+                min_node->next = current;
+                current->prev->next = min_node;
+                min_node->prev = current->prev;
+                current->prev = min_node;
+            }
+            else
+                current = current->next;
+        }
     }
 
     void merge(list &lst)
     {
-        this->concat_list(lst);
+        concat_list(lst);
+        sort();
+    }
+
+    void unique()
+    {
+        node *temp_node1 = dummy_node->next;
+        node *temp_node2 = nullptr;
+        node *delete_node = nullptr;
+
+        while (temp_node1 != dummy_node)
+        {
+            temp_node2 = temp_node1->next;
+
+            while (temp_node2 != dummy_node)
+            {
+                if (temp_node2->data == temp_node1->data)
+                {
+                    delete_node = temp_node2;
+                    temp_node2 = temp_node2->next;
+
+                    delete_node->next->prev = delete_node->prev;
+                    delete_node->prev->next = delete_node->next;
+                    counter--;
+                    delete delete_node;
+                }
+                else
+                    temp_node2 = temp_node2->next;
+            }
+            temp_node1 = temp_node1->next;
+        }
     }
 
     ///////////////////////////////////////////////////////////
@@ -666,7 +732,8 @@ void printLists(list list1, list list2)
     cout << "list2: ";
     for (list::iterator iter = list2.begin(); iter != list2.end(); ++iter)
         cout << *iter << ' ';
-    cout << endl;
+    cout << endl
+         << endl;
 }
 
 list::iterator find(list::iterator start, list::iterator end, int key)
@@ -679,34 +746,6 @@ list::iterator find(list::iterator start, list::iterator end, int key)
     }
     return start;
 }
-
-/*int main()
-{
-    list ls1, ls2;
-    ls1.push_back(60);
-    ls1.push_back(70);
-    ls1.push_back(80);
-    ls1.push_back(90);
-    ls1.push_back(100);
-
-    ls2.push_back(10);
-    ls2.push_back(20);
-    ls2.push_back(30);
-    ls2.push_back(40);
-    ls2.push_back(50);
-
-    printLists(ls1, ls2);
-    cout << ls1.count_nodes() << endl
-         << ls2.count_nodes() << endl;
-
-    ls1 = ls2;
-
-    printLists(ls1, ls2);
-    cout << ls1.count_nodes() << endl
-         << ls2.count_nodes() << endl;
-
-    return 0;
-}*/
 
 int main()
 {
@@ -733,11 +772,18 @@ int main()
     printLists(list1, list2);
 
     // Move first element of list2 to the end
-    // list2.splice(list2.end(),    // Destination position
-    //              list2,          // Source list
-    //              list2.begin()); // Source positions
+    list2.splice(list2.end(),    // Destination position
+                 list2,          // Source list
+                 list2.begin()); // Source positions
 
-    // printLists(list1, list2);
+    printLists(list1, list2);
+
+    // Sort second list =, assign to list1 and remove duplicates
+    list2.sort();
+    list1 = list2;
+    list2.unique();
+
+    printLists(list1, list2);
 
     // Merge both sorted lists into the first list
     list1.merge(list2);
