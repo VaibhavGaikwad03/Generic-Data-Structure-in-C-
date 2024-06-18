@@ -3,7 +3,7 @@
 #include "vector.h"
 using std::cout;
 using std::endl;
-  
+   
 // iterator overloaded operators
 int &vector::iterator::operator*()
 {
